@@ -1,0 +1,15 @@
+{
+  "name": "Tinuola Towers",
+  "short_name": "Tinuola",
+  "start_url": "smart_lights/landing.html",
+  "display": "standalone",
+  "background_color": "#111111",
+  "theme_color": "#008CBA",
+  "icons": [
+    {
+      "src": "smart_lights/media/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
