@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Video Showcase</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #111; min-height: 100vh; display: flex; flex-direction: column; color: white; overflow-x: hidden; }
+        
+        /* EXACT SAME BACKGROUND STYLE AS PHOTOS PAGE (USING PIC1) */
+        .page-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: url('media/pic1.jpg'); background-size: cover; background-position: center; filter: blur(4px) brightness(35%); z-index: -2; }
+        
+        .container { flex: 1; padding: 30px 20px; width: 100%; max-width: 1100px; margin: 0 auto; }
+        h2 { font-size: 26px; margin-bottom: 5px; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
+        .subtitle { color: #aaa; margin-bottom: 25px; font-size: 14px; }
+        
+        /* EXACT SAME GLOWING BACK BUTTON */
+        .btn-back { display: inline-block; background-color: rgba(0, 140, 186, 0.85); border: 2px solid #00bfff; padding: 12px 24px; font-size: 13px; font-weight: bold; border-radius: 8px; margin-bottom: 25px; color: #ffffff; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6); transition: 0.2s; }
+        .btn-back:hover { background-color: #008CBA; box-shadow: 0 0 18px #00bfff; transform: scale(1.03); }
+
+        /* EXACT SAME CARD GRID AS PHOTOS PAGE */
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; width: 100%; max-width: 850px; margin: 10px auto; }
+        .grid-item { background-color: rgba(25, 25, 25, 0.85); border: 1px solid #444; border-radius: 10px; padding: 10px; cursor: pointer; transition: 0.2s; box-shadow: 0 6px 15px rgba(0,0,0,0.5); }
+        .grid-item:hover { transform: translateY(-4px); border-color: #00bfff; box-shadow: 0 8px 20px rgba(0, 191, 255, 0.3); }
+        
+        .thumb-box { position: relative; width: 100%; height: 220px; border-radius: 6px; overflow: hidden; background: #000; }
+        .thumb-box img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0.85; }
+        .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0, 140, 186, 0.9); border: 2px solid #fff; color: white; width: 58px; height: 58px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.8); }
+        
+        .caption { margin-top: 10px; font-size: 14px; font-weight: bold; color: #ddd; }
+
+        /* PURE BLACK FULL-SCREEN VIDEO PLAYER (NO BACKGROUND IMAGE) */
+        .video-lightbox { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #000000; z-index: 9999; justify-content: center; align-items: center; }
+        .video-lightbox video { width: 100%; height: 100%; object-fit: contain; background-color: #000000; }
+        .close-btn { position: fixed; top: 15px; right: 25px; color: #fff; background: rgba(200, 0, 0, 0.8); border: 2px solid #fff; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold; cursor: pointer; z-index: 10000; }
+
+        footer { background-color: #111; color: #aaa; padding: 15px; font-size: 13px; margin-top: 40px; border-top: 3px solid #008CBA; width: 100%; }
+    </style>
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container">
+        <a href="landing.html" class="btn-back">Back To Menu</a>
+        <h2>Project Video Showcase</h2>
+        <p class="subtitle">Tap any video to watch in full-screen</p>
+
+        <!-- GRID WITH 2 VIDEOS -->
+        <div class="video-grid">
+            <!-- Video 1 -->
+            <div class="grid-item" onclick="openVideo('media/video1.mp4')">
+                <div class="thumb-box">
+                    <img src="media/pic1.jpg" alt="Video 1">
+                    <div class="play-icon">▶</div>
+                </div>
+                <div class="caption">Video 1: Architectural Walkthrough</div>
+            </div>
+
+            <!-- Video 2 -->
+            <div class="grid-item" onclick="openVideo('media/video2.mp4')">
+                <div class="thumb-box">
+                    <img src="media/pic2.jpg" alt="Video 2">
+                    <div class="play-icon">▶</div>
+                </div>
+                <div class="caption">Video 2: Smart Automation Demo</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PURE BLACK FULL-SCREEN PLAYER -->
+    <div id="videoLightbox" class="video-lightbox">
+        <span class="close-btn" onclick="closeVideo()">&times;</span>
+        <video id="fullVideo" controls playsinline></video>
+    </div>
+
+    <footer><p>&copy; 2026 Joshka Technology. All rights reserved.</p></footer>
+
+    <script>
+        const lightbox = document.getElementById('videoLightbox');
+        const fullVideo = document.getElementById('fullVideo');
+        
+        function openVideo(videoFile) {
+            fullVideo.src = videoFile;
+            fullVideo.muted = false;   // Forces sound ON
+            fullVideo.volume = 1.0;    // Sets volume to 100%
+            lightbox.style.display = 'flex';
+            
+            fullVideo.play().then(() => {
+                if (lightbox.requestFullscreen) {
+                    lightbox.requestFullscreen().catch(() => {});
+                } else if (lightbox.webkitRequestFullscreen) {
+                    lightbox.webkitRequestFullscreen();
+                } else if (fullVideo.webkitEnterFullscreen) {
+                    fullVideo.webkitEnterFullscreen();
+                }
+            }).catch(err => {
+                console.log("Playback error:", err);
+            });
+        }
+
+
+        function closeVideo() {
+            fullVideo.pause();
+            fullVideo.src = "";
+            lightbox.style.display = 'none';
+
+            if (document.fullscreenElement) {
+                document.exitFullscreen().catch(() => {});
+            }
+        }
+
+        document.addEventListener('fullscreenchange', () => {
+            if (!document.fullscreenElement && lightbox.style.display === 'flex') {
+                closeVideo();
+            }
+        });
+    </script>
+</body>
+</html>

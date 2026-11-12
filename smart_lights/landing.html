@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tinuola Towers</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            background-color: #111; 
+            color: white; 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            padding: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* FULLSCREEN LOCAL BACKGROUND VIDEO */
+        #bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+        }
+
+        .video-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: -1;
+        }
+
+        /* TOP HEADER & CORNER TEXTS */
+        .top-left-text {
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: left;
+            max-width: 200px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .top-right-text {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: right;
+            max-width: 200px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        }
+
+        h2 { 
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 46px; 
+            width: 100%;
+            text-shadow: 0 3px 8px rgba(0,0,0,0.8); 
+        }
+
+        /* CENTERED NAVIGATION BUTTONS */
+        .menu-container { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 20px; 
+            width: 100%; 
+            max-width: 340px; 
+            margin-top: 80px;
+        }
+        .btn-nav { 
+            padding: 22px; 
+            font-size: 16px; 
+            font-weight: bold; 
+            border: 2px solid #008CBA; 
+            background-color: rgba(0, 0, 0, 0.5); 
+            color: white; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            text-transform: uppercase; 
+            text-decoration: none; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.6); 
+            transition: 0.2s; 
+        }
+        .btn-nav:hover { background-color: #008CBA; box-shadow: 0 0 20px #008CBA; transform: scale(1.03); }
+
+        /* AUDIO UNMUTE BUTTON */
+        .sound-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 140, 186, 0.8);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        /* MOBILE SCREEN ADJUSTMENTS */
+        @media (max-width: 768px) {
+            h2 { font-size: 32px; top: 65px; }
+            .top-left-text, .top-right-text { font-size: 12px; top: 15px; max-width: 45%; }
+            .menu-container { margin-top: 110px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LOCAL BACKGROUND VIDEO -->
+    <video id="bg-video" autoplay loop muted playsinline>
+        <source src="media/bg-video.mp4" type="video/mp4">
+    </video>
+    <div class="video-overlay"></div>
+
+    <!-- TOP CORNER DESCRIPTIONS & CENTER TITLE -->
+    <div class="top-left-text">Smart Building Automation<br>Lagos, Nigeria</div>
+    <h2>Tinuola Towers</h2>
+    <div class="top-right-text">Luxury Living &<br>Intelligent Control</div>
+
+    <!-- NAVIGATION MENU -->
+    <div class="menu-container">
+        <a href="index.html" class="btn-nav">💡 Light Button</a>
+        <a href="photos.html" class="btn-nav">🖼️ Pictures Button</a>
+        <a href="video.html" class="btn-nav">🎬 Video Button</a>
+    </div>
+
+    <!-- SOUND TOGGLE -->
+    <button class="sound-btn" id="soundToggle" onclick="toggleAudio()">🔇 Unmute Audio</button>
+
+    <script>
+        const video = document.getElementById('bg-video');
+        const btn = document.getElementById('soundToggle');
+
+        // Attempts to play with sound if browser permissions allow it
+        video.muted = false;
+        video.play().then(() => {
+            btn.textContent = "🔊 Mute Audio";
+        }).catch(() => {
+            // Falls back to muted autoplay if browser blocks unmuted video
+            video.muted = true;
+            video.play();
+        });
+
+        function toggleAudio() {
+            if (video.muted) {
+                video.muted = false;
+                btn.textContent = "🔊 Mute Audio";
+            } else {
+                video.muted = true;
+                btn.textContent = "🔇 Unmute Audio";
+            }
+        }
+    </script>
+</body>
+</html>
